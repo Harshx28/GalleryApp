@@ -1,0 +1,109 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="23727" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="5pV-Sd-Sek">
+    <device id="retina6_12" orientation="portrait" appearance="light"/>
+    <dependencies>
+        <deployment identifier="iOS"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="23721"/>
+        <capability name="Safe area layout guides" minToolsVersion="9.0"/>
+        <capability name="System colors in document resources" minToolsVersion="11.0"/>
+        <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
+    </dependencies>
+    <scenes>
+        <!--LoginVC-->
+        <scene sceneID="s0d-6b-0kx">
+            <objects>
+                <viewController storyboardIdentifier="LoginVC" id="Y6W-OH-hqX" customClass="LoginVC" customModule="GalleryApp" customModuleProvider="target" sceneMemberID="viewController">
+                    <view key="view" contentMode="scaleToFill" id="5EZ-qb-Rvc">
+                        <rect key="frame" x="0.0" y="0.0" width="393" height="852"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="imgAppLogo" translatesAutoresizingMaskIntoConstraints="NO" id="5hS-pn-Jof">
+                                <rect key="frame" x="136.66666666666666" y="192" width="119.99999999999997" height="120"/>
+                                <constraints>
+                                    <constraint firstAttribute="width" secondItem="5hS-pn-Jof" secondAttribute="height" multiplier="1:1" id="4eW-Xb-8vb"/>
+                                    <constraint firstAttribute="height" constant="120" id="qfd-sg-XiF"/>
+                                </constraints>
+                            </imageView>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="GalleryApp" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="ZDO-kr-lDZ">
+                                <rect key="frame" x="20" y="332" width="353" height="24"/>
+                                <fontDescription key="fontDescription" type="boldSystem" pointSize="20"/>
+                                <nil key="textColor"/>
+                                <nil key="highlightedColor"/>
+                            </label>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Sign up with Google" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="QnH-yd-M1m">
+                                <rect key="frame" x="20" y="386" width="353" height="24"/>
+                                <fontDescription key="fontDescription" type="boldSystem" pointSize="20"/>
+                                <nil key="textColor"/>
+                                <nil key="highlightedColor"/>
+                            </label>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="soO-I9-Vc1">
+                                <rect key="frame" x="171.66666666666666" y="440" width="50" height="50"/>
+                                <constraints>
+                                    <constraint firstAttribute="width" secondItem="soO-I9-Vc1" secondAttribute="height" multiplier="1:1" id="kQB-vD-MTO"/>
+                                    <constraint firstAttribute="height" constant="50" id="ocR-mm-DE8"/>
+                                </constraints>
+                                <fontDescription key="fontDescription" type="boldSystem" pointSize="23"/>
+                                <inset key="imageEdgeInsets" minX="0.0" minY="0.0" maxX="2.2250738585072014e-308" maxY="0.0"/>
+                                <state key="normal" image="imgGoogleLogo">
+                                    <color key="titleColor" systemColor="labelColor"/>
+                                </state>
+                                <connections>
+                                    <action selector="btnGoogleClicked:" destination="Y6W-OH-hqX" eventType="touchUpInside" id="IOm-AY-td3"/>
+                                </connections>
+                            </button>
+                        </subviews>
+                        <viewLayoutGuide key="safeArea" id="vDu-zF-Fre"/>
+                        <color key="backgroundColor" systemColor="systemBackgroundColor"/>
+                        <constraints>
+                            <constraint firstItem="vDu-zF-Fre" firstAttribute="trailing" secondItem="QnH-yd-M1m" secondAttribute="trailing" constant="20" id="2DK-5n-EEd"/>
+                            <constraint firstItem="5hS-pn-Jof" firstAttribute="centerX" secondItem="vDu-zF-Fre" secondAttribute="centerX" id="ANY-eH-1te"/>
+                            <constraint firstItem="ZDO-kr-lDZ" firstAttribute="leading" secondItem="vDu-zF-Fre" secondAttribute="leading" constant="20" id="Cd8-CO-MX2"/>
+                            <constraint firstItem="soO-I9-Vc1" firstAttribute="top" secondItem="QnH-yd-M1m" secondAttribute="bottom" constant="30" id="EGB-hS-iOm"/>
+                            <constraint firstItem="vDu-zF-Fre" firstAttribute="bottom" relation="greaterThanOrEqual" secondItem="soO-I9-Vc1" secondAttribute="bottom" constant="20" id="EVY-X7-8QQ"/>
+                            <constraint firstItem="QnH-yd-M1m" firstAttribute="leading" secondItem="vDu-zF-Fre" secondAttribute="leading" constant="20" id="ONE-Kr-4nx"/>
+                            <constraint firstItem="QnH-yd-M1m" firstAttribute="top" secondItem="ZDO-kr-lDZ" secondAttribute="bottom" constant="30" id="S17-Tl-goR"/>
+                            <constraint firstItem="soO-I9-Vc1" firstAttribute="centerX" secondItem="vDu-zF-Fre" secondAttribute="centerX" id="Xi2-o7-AW5"/>
+                            <constraint firstItem="vDu-zF-Fre" firstAttribute="trailing" secondItem="ZDO-kr-lDZ" secondAttribute="trailing" constant="20" id="aEt-2c-StU"/>
+                            <constraint firstItem="ZDO-kr-lDZ" firstAttribute="top" secondItem="5hS-pn-Jof" secondAttribute="bottom" constant="20" id="r6S-AO-KJY"/>
+                            <constraint firstItem="5hS-pn-Jof" firstAttribute="top" secondItem="vDu-zF-Fre" secondAttribute="top" constant="30" id="ydc-uW-Yo7"/>
+                        </constraints>
+                    </view>
+                    <navigationItem key="navigationItem" id="aFT-ci-h9s"/>
+                    <connections>
+                        <outlet property="btnGoogle" destination="soO-I9-Vc1" id="G3g-5M-4PO"/>
+                    </connections>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="Ief-a0-LHa" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="1066.4122137404579" y="112.67605633802818"/>
+        </scene>
+        <!--Navigation Controller-->
+        <scene sceneID="2v1-91-gLD">
+            <objects>
+                <navigationController storyboardIdentifier="NavLogin" automaticallyAdjustsScrollViewInsets="NO" id="5pV-Sd-Sek" sceneMemberID="viewController">
+                    <toolbarItems/>
+                    <navigationBar key="navigationBar" contentMode="scaleToFill" id="sGM-XY-T3d">
+                        <rect key="frame" x="0.0" y="118" width="393" height="44"/>
+                        <autoresizingMask key="autoresizingMask"/>
+                    </navigationBar>
+                    <nil name="viewControllers"/>
+                    <connections>
+                        <segue destination="Y6W-OH-hqX" kind="relationship" relationship="rootViewController" id="a6r-pe-S3H"/>
+                    </connections>
+                </navigationController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="nHy-ww-2kI" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="139.69465648854961" y="112.67605633802818"/>
+        </scene>
+    </scenes>
+    <resources>
+        <image name="imgAppLogo" width="170.66667175292969" height="170.66667175292969"/>
+        <image name="imgGoogleLogo" width="266.66665649414062" height="266.66665649414062"/>
+        <systemColor name="labelColor">
+            <color white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+        </systemColor>
+        <systemColor name="systemBackgroundColor">
+            <color white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+        </systemColor>
+    </resources>
+</document>
