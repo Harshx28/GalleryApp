@@ -13,10 +13,16 @@ class CellImages: UICollectionViewCell {
     @IBOutlet weak var imgWallpaper: UIImageView!
 
     // MARK: - Cache (shared across cells)
-    private static let imageCache = NSCache<NSString, UIImage>()
+    private static let imageCache: NSCache<NSString, UIImage> = {
+        let cache = NSCache<NSString, UIImage>()
+        cache.countLimit = 100 // Limit number of images
+        cache.totalCostLimit = 50 * 1024 * 1024 // 50 MB limit
+        return cache
+    }()
 
     private var shimmerView: ShimmerView?
     private var currentImageKey: NSString?
+    private var currentTask: URLSessionDataTask?
 
     // Pagination callback
     var imageLoadCompletion: (() -> Void)?
@@ -29,6 +35,8 @@ class CellImages: UICollectionViewCell {
 
     override func prepareForReuse() {
         super.prepareForReuse()
+        currentTask?.cancel()
+        currentTask = nil
         imgWallpaper.image = nil
         currentImageKey = nil
         imageLoadCompletion = nil
@@ -36,12 +44,13 @@ class CellImages: UICollectionViewCell {
     }
 
     // MARK: - Offline (CoreData)
-    func configure(with imageData: Data) {
-
-        let key = NSString(string: "\(imageData.hashValue)")
+    func configure(with imageData: Data, imageId: String? = nil) {
+        // Use image ID if available, otherwise fallback to hash (less ideal but backward compatible)
+        let keyString = imageId ?? "offline_\(imageData.hashValue)"
+        let key = NSString(string: keyString)
         currentImageKey = key
 
-        
+        // Check cache first
         if let cachedImage = Self.imageCache.object(forKey: key) {
             imgWallpaper.image = cachedImage
             imageLoadCompletion?()
@@ -60,18 +69,20 @@ class CellImages: UICollectionViewCell {
 
     // MARK: - Online
     func configure(with urlString: String) {
-
+        // Cancel any previous task
+        currentTask?.cancel()
+        
         let key = NSString(string: urlString)
         currentImageKey = key
 
-        
+        // Check cache first
         if let cachedImage = Self.imageCache.object(forKey: key) {
             imgWallpaper.image = cachedImage
             imageLoadCompletion?()
             return
         }
 
-        // ❌ Show shimmer ONLY for first-time load
+        // Show shimmer for first-time load
         showShimmer()
 
         guard let url = URL(string: urlString) else {
@@ -80,29 +91,39 @@ class CellImages: UICollectionViewCell {
             return
         }
 
-        URLSession.shared.dataTask(with: url) { [weak self] data, _, error in
+        currentTask = URLSession.shared.dataTask(with: url) { [weak self] data, response, error in
             DispatchQueue.main.async {
-
-                guard let self = self else { return }
+                guard let self = self,
+                      self.currentImageKey == key else {
+                    return
+                }
 
                 defer {
                     self.hideShimmer()
                     self.imageLoadCompletion?()
                 }
 
-                guard
-                    let data = data,
-                    let image = UIImage(data: data),
-                    self.currentImageKey == key
-                else {
+                // Check for errors or cancellation
+                if let error = error as NSError?,
+                   error.code == NSURLErrorCancelled {
                     return
                 }
 
-                
+                guard let data = data,
+                      let image = UIImage(data: data) else {
+                    return
+                }
+
+                // Verify we're still showing the same image
+                guard self.currentImageKey == key else {
+                    return
+                }
+
                 Self.imageCache.setObject(image, forKey: key)
                 self.imgWallpaper.image = image
             }
-        }.resume()
+        }
+        currentTask?.resume()
     }
 
     // MARK: - Shimmer

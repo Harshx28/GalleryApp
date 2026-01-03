@@ -34,6 +34,15 @@ class HomeVC: UIViewController {
         setupUI()
         observeNetwork()
     }
+    
+    override func viewDidAppear(_ animated: Bool) {
+        super.viewDidAppear(animated)
+
+        if apiImages.isEmpty && !isOfflineMode {
+            loadOnline()
+        }
+    }
+
 
     deinit {
         print("‼️ deinit HomeVC")
@@ -143,12 +152,12 @@ class HomeVC: UIViewController {
 
     // MARK: - Core Data Cache
     private func saveToCoreData(_ images: [PicsumImage]) {
-
+        guard !images.isEmpty else { return }
+        
         let context = PersistenceController.shared.container.newBackgroundContext()
-
-        let imagesToCache = Array(images.prefix(limit))
         let group = DispatchGroup()
 
+        // Check existing cached images
         var existingIDs = Set<String>()
         context.performAndWait {
             let fetch: NSFetchRequest<CachedImage> = CachedImage.fetchRequest()
@@ -157,13 +166,20 @@ class HomeVC: UIViewController {
             }
         }
 
-        for image in imagesToCache {
+        // Cache only new images
+        for image in images {
             guard !existingIDs.contains(image.id),
                   let url = URL(string: image.download_url) else { continue }
 
             group.enter()
-            URLSession.shared.dataTask(with: url) { data, _, _ in
+            URLSession.shared.dataTask(with: url) { data, response, error in
                 defer { group.leave() }
+
+                // Skip on error or cancellation
+                if let error = error as NSError?,
+                   error.code == NSURLErrorCancelled {
+                    return
+                }
 
                 guard let data = data else { return }
 
@@ -171,6 +187,7 @@ class HomeVC: UIViewController {
                     let cached = CachedImage(context: context)
                     cached.id = image.id
                     cached.imageData = data
+                    cached.author = image.author
                 }
             }.resume()
         }
@@ -178,7 +195,11 @@ class HomeVC: UIViewController {
         group.notify(queue: .global(qos: .utility)) {
             context.perform {
                 if context.hasChanges {
-                    try? context.save()
+                    do {
+                        try context.save()
+                    } catch {
+                        print("Core Data save error: \(error.localizedDescription)")
+                    }
                 }
             }
         }
@@ -212,8 +233,9 @@ extension HomeVC: UICollectionViewDelegate,
         }
 
         if isOfflineMode {
-            if let data = cachedImages[indexPath.item].imageData {
-                cell.configure(with: data)
+            let cachedImage = cachedImages[indexPath.item]
+            if let data = cachedImage.imageData {
+                cell.configure(with: data, imageId: cachedImage.id)
             }
         } else {
             cell.configure(with: apiImages[indexPath.item].download_url)
